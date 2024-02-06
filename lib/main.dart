@@ -1,7 +1,9 @@
+import 'package:devspectrum/pages/login.dart';
 import 'package:devspectrum/pages/signup.dart';
 import 'package:devspectrum/responsive/mobileScreen.dart';
 import 'package:devspectrum/responsive/responsive_layout.dart';
 import 'package:devspectrum/responsive/webScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,11 +37,26 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(backgroundColor: Colors.black),
           brightness: Brightness.dark),
       debugShowCheckedModeBanner: false,
-       home:const SignUpScreen(),
-      // home: const ResponsiveLayout(
-      //   mobileScreenLayout: mobileScreenLayout(),
-      //   webScreenLayout: webScreenLayout(),
-      // ),
+       home:StreamBuilder(stream: FirebaseAuth.instance.authStateChanges(),
+       builder: (context,snapshot){
+       if(snapshot.connectionState==ConnectionState.active){
+        if(snapshot.hasData){
+          return const ResponsiveLayout(mobileScreenLayout: mobileScreenLayout(), webScreenLayout: webScreenLayout());
+        } else if(snapshot.hasError){
+          return Center(
+            child: Text('${snapshot.error}'),
+          );
+        }
+       }
+       if(snapshot.connectionState==ConnectionState.waiting){
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+       }
+       return const LoginScreen();
+
+       },)
+      
     );
   }
 }
