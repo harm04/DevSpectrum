@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1055115213250",
+    "project_id": "devspectrum-bf1e0",
+    "storage_bucket": "devspectrum-bf1e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055115213250:android:77ee922258943a1801be5b",
+        "android_client_info": {
+          "package_name": "com.example.devspectrum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLlrvCtQpc7yx8P0ZC4jLo02iZ6QRI9Og"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
