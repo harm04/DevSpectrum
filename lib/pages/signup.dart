@@ -1,3 +1,7 @@
+import 'package:devspectrum/pages/login.dart';
+import 'package:devspectrum/resources/auth_methods.dart';
+import 'package:devspectrum/responsive/mobileScreen.dart';
+import 'package:devspectrum/utils/snackbar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:rive/rive.dart';
@@ -10,30 +14,6 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-//     late SMITrigger failTrigger,successTrigger;
-//     late SMIBool closeEyesBool,lookBool;
-//     Artboard? artboard;
-//     late StateMachineController? stateMachineController;
-
-// @override
-//   void initState() {
-//     super.initState() ;
-//     initArtboard();
-//   }
-
-  // initArtboard(){
-  //     rootBundle.load('assets/rive/login.riv').then((value) {
-  //       final file = RiveFile.import(value);
-  //       final art =file.mainArtboard;
-  //       stateMachineController=StateMachineController.fromArtboard(art, 'Login machine')!;
-  //       if(stateMachineController!=null){
-  //         art.addController(stateMachineController!);
-  //       }
-  //       setState(() {
-  //         artboard=art;
-  //       });
-  //     });
-  // }
 FocusNode emailFocusNode =FocusNode();
 TextEditingController emailcontroller = TextEditingController();
 FocusNode passwordFocusNode =FocusNode();
@@ -46,6 +26,8 @@ TextEditingController usernamecontroller = TextEditingController();
     SMIInput<bool>?isHandsUp;
     SMIInput<bool>?trigSuccess;
     SMIInput<bool>?trigFail;
+
+     bool isLoading = false;
 
     @override
   void initState() {
@@ -77,7 +59,7 @@ TextEditingController usernamecontroller = TextEditingController();
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
+        child:isLoading?const Center(child: CircularProgressIndicator()):  Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
@@ -177,7 +159,14 @@ TextEditingController usernamecontroller = TextEditingController();
                           width: 5,
                         ),
                         TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                               Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>const LoginScreen(),
+                                      ),
+                                    );
+                            },
                             child: const Text(
                               'Login',
                               style:
@@ -190,11 +179,29 @@ TextEditingController usernamecontroller = TextEditingController();
                     ),
                     GestureDetector(
                       
-                      onTap: () {
+                      onTap: ()async {
+                        setState(() {
+                          isLoading=true;
+                        });
+                      String res =await  AuthMethods().signUp(email: emailcontroller.text, password: passwordcontroller.text, username: usernamecontroller.text);
+                        if(res=='success'){
+                          trigSuccess?.change(true);
+                          setState(() {
+                            isLoading=false;
+                          });
+                          showSnackbar('Sign up success', context);
+                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const mobileScreenLayout(),),);
+                        } else {
+                          trigFail?.change(true);
+                          setState(() {
+                            isLoading=false;
+                          });
+                          showSnackbar(res, context);
+                        }
                         emailFocusNode.unfocus();
                         passwordFocusNode.unfocus();
                         usernameFocusNode.unfocus();
-
+                        
                         
                       },
                       child: Container(
