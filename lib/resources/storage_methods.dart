@@ -4,20 +4,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:uuid/uuid.dart';
 
 class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String ssId = Uuid().v1();
-  String pId = Uuid().v1();
+  // String ssId = Uuid().v1();
+//  final pId = Uuid().v1();
   Future<String> uploadImageToStorage(
       String childName, Uint8List file, bool isPost) async {
     Reference ref =
         _storage.ref().child(childName).child(_auth.currentUser!.uid);
-    if (isPost) {
-      ref = ref.child(pId);
-    }
+   
    
     UploadTask uploadTask = ref.putData(file);
     TaskSnapshot snap = await uploadTask;
@@ -25,7 +22,20 @@ class StorageMethods {
     return downloadUrl;
   }
 
-  Future<void> uploadMultipleImages(List<File> selectedScreenshots) async {
+  Future<String> uploadPostToStorage(
+      String childName, Uint8List file, String pId) async {
+    Reference ref =
+        _storage.ref().child(childName).child(_auth.currentUser!.uid).child(pId);
+    
+   
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+
+  Future<List<String>> uploadMultipleImages(List<File> selectedScreenshots,String pId) async {
     final FirebaseStorage storage = FirebaseStorage.instance;
     List<File> images = selectedScreenshots;
     // Create a list of upload tasks
@@ -34,7 +44,7 @@ class StorageMethods {
       Reference imageRef = storage
           .ref('Screenshots')
           .child(pId)
-          .child(ssId)
+          // .child(ssId)
           .child('${image.path.split('/').last}');
 
       // Upload the image
@@ -59,7 +69,8 @@ class StorageMethods {
     }));
 
     // Print the download URLs
-    urls.forEach(print);
+    // urls.forEach(print);
+    return urls;
 
     //  String ssUid = DateTime.now().millisecondsSinceEpoch.toString();
     //  await _firestore.

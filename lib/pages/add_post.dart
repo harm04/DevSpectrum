@@ -1,14 +1,15 @@
 import 'dart:io';
 
-import 'package:devspectrum/pages/profile.dart';
+import 'package:devspectrum/pages/project_details/feed.dart';
+
 import 'package:devspectrum/providers/user_provider.dart';
 import 'package:devspectrum/resources/firestore_methods.dart';
 import 'package:devspectrum/resources/storage_methods.dart';
+import 'package:devspectrum/responsive/mobileScreen.dart';
 
 import 'package:devspectrum/utils/pickimage.dart';
 import 'package:devspectrum/utils/snackbar.dart';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +25,6 @@ class AddPost extends StatefulWidget {
 }
 
 class _AddPostState extends State<AddPost> {
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   bool isLoading = false;
   TextEditingController captioncontroller = TextEditingController();
   TextEditingController githubcontroller = TextEditingController();
@@ -80,14 +80,19 @@ class _AddPostState extends State<AddPost> {
         isLoading = true;
       });
       res = await FirestoreMethods().uploadPost(_image!, uid, username, profImg,
-          captioncontroller.text, githubcontroller.text);
-      await StorageMethods().uploadMultipleImages(selectedScreenshots);
+          captioncontroller.text, githubcontroller.text,selectedScreenshots);
+      // await StorageMethods().uploadMultipleImages(selectedScreenshots);
       if (res == 'success') {
         setState(() {
           isLoading = false;
         });
         clearImage();
-        showSnackbar('post uploaded', context);
+        // ignore: use_build_context_synchronously
+       await showSnackbar('post uploaded', context);
+        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const mobileScreenLayout()));
       }
     } catch (err) {
       setState(() {
@@ -102,16 +107,15 @@ class _AddPostState extends State<AddPost> {
     final User user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
         appBar: AppBar(
+            
           title: const Text('Post'),
           actions: [
             _image != null
                 ? TextButton(
                     onPressed: () async {
                       await postProject(user.uid, user.username, user.photoUrl);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ProfilePage()));
+                      // ignore: use_build_context_synchronously
+                      
                     },
                     child: const Text('Upload'))
                 : const SizedBox()

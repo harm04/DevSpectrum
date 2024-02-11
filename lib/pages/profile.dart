@@ -1,14 +1,10 @@
 
-import 'dart:typed_data';
 
 import 'package:devspectrum/models/user.dart';
 import 'package:devspectrum/pages/edit_profile/edit_page.dart';
 import 'package:devspectrum/providers/user_provider.dart';
 import 'package:devspectrum/resources/auth_methods.dart';
-import 'package:devspectrum/resources/storage_methods.dart';
-import 'package:devspectrum/utils/pickimage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {

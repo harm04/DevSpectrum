@@ -8,7 +8,7 @@ class AuthMethods {
 
   Future<models.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
-    DocumentSnapshot snap =await _firestore.collection('Users').doc(_auth.currentUser!.uid).get();
+    DocumentSnapshot snap =await _firestore.collection('Users').doc(currentUser.uid).get();
     return models.User.fromSnap(snap);
   }
 
