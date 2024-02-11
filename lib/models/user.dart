@@ -36,4 +36,6 @@ class User {
       photoUrl: snapshot['photoUrl'],
     );
   }
+
+  
 }

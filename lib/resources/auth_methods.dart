@@ -79,4 +79,6 @@ class AuthMethods {
     res = 'success';
     return res;
   }
+
+ 
 }

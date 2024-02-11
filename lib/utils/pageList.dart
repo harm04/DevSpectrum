@@ -1,9 +1,10 @@
+import 'package:devspectrum/pages/add_post.dart';
 import 'package:devspectrum/pages/profile.dart';
 import 'package:flutter/material.dart';
 
 const homeScreenItems=[
- ProfilePage(),
+ Text('Home'),
   Text('search'),
-  Text('add'),
-  Text('priofile'),
+  AddPost(),
+  ProfilePage()
 ];

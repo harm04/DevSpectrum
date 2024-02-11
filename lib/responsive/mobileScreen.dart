@@ -1,6 +1,4 @@
 
-import 'package:devspectrum/pages/login.dart';
-import 'package:devspectrum/resources/auth_methods.dart';
 import 'package:devspectrum/utils/pageList.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +84,7 @@ class _mobileScreenLayoutState extends State<mobileScreenLayout> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.add_circle_rounded,
-              color: (_page == 3) ? Colors.white : Colors.grey,
+              color: (_page == 2) ? Colors.white : Colors.grey,
             ),
             label: '',
             backgroundColor: Colors.white,
@@ -94,7 +92,7 @@ class _mobileScreenLayoutState extends State<mobileScreenLayout> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.person,
-              color: (_page == 4) ? Colors.white : Colors.grey,
+              color: (_page == 3) ? Colors.white : Colors.grey,
             ),
             label: '',
             backgroundColor: Colors.white,
