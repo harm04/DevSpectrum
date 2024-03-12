@@ -28,11 +28,13 @@ class _AddPostState extends State<AddPost> {
   bool isLoading = false;
   TextEditingController captioncontroller = TextEditingController();
   TextEditingController githubcontroller = TextEditingController();
+    TextEditingController projectcontroller = TextEditingController();
   @override
   void dispose() {
     super.dispose();
     captioncontroller.dispose();
     githubcontroller.dispose();
+     projectcontroller.dispose();
   }
 
   // late CollectionReference imgRef;
@@ -80,7 +82,7 @@ class _AddPostState extends State<AddPost> {
         isLoading = true;
       });
       res = await FirestoreMethods().uploadPost(_image!, uid, username, profImg,
-          captioncontroller.text, githubcontroller.text,selectedScreenshots);
+          captioncontroller.text, githubcontroller.text,projectcontroller.text,selectedScreenshots);
       // await StorageMethods().uploadMultipleImages(selectedScreenshots);
       if (res == 'success') {
         setState(() {
@@ -89,6 +91,7 @@ class _AddPostState extends State<AddPost> {
         clearImage();
         // ignore: use_build_context_synchronously
        await showSnackbar('post uploaded', context);
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -105,7 +108,15 @@ class _AddPostState extends State<AddPost> {
   @override
   Widget build(BuildContext context) {
     final User user = Provider.of<UserProvider>(context).getUser;
-    return Scaffold(
+    return  isLoading
+                      ? const Center(
+                        child: CircularProgressIndicator(
+                           
+                          ),
+                      )
+                      : GestureDetector(
+       onTap: ()=>FocusScope.of(context).unfocus(),
+      child: Scaffold(
         appBar: AppBar(
             
           title: const Text('Post'),
@@ -185,11 +196,7 @@ class _AddPostState extends State<AddPost> {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  isLoading
-                      ? const LinearProgressIndicator(
-                          color: Colors.blue,
-                        )
-                      : Container(),
+                 Container(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -223,6 +230,19 @@ class _AddPostState extends State<AddPost> {
                         ),
                       )
                     ],
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    'add your project name here.',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
+                  TextField(
+                    controller: projectcontroller,
+                    decoration: const InputDecoration(
+                        hintText: 'Devspectrum',
+                        hintStyle: TextStyle(fontSize: 14)),
                   ),
                   const SizedBox(
                     height: 30,
@@ -277,6 +297,6 @@ class _AddPostState extends State<AddPost> {
                             }),
                   ))
                 ],
-              ));
+              )));
   }
 }

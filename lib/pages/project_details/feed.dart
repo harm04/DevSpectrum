@@ -21,7 +21,7 @@ class _FeedScreenState extends State<FeedScreen> {
       appBar:AppBar(
               backgroundColor: Colors.black,
               centerTitle: false,
-              title: Text('logo'),
+              title: Image.asset('assets/logo/D.png'),
               actions: [
                 IconButton(
                   icon: const Icon(

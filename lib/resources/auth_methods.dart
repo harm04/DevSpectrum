@@ -31,7 +31,10 @@ class AuthMethods {
                 'https://as1.ftcdn.net/v2/jpg/05/34/22/36/1000_F_534223614_iJ0EyF0kZu8IMncyeLt80SVx6Fxv8Wnh.webp',
             username: username,
             uid: cred.user!.uid,
-            bio: 'Hey I am using Devspectrum!');
+            bio: 'Hey I am using Devspectrum!',
+            followers: [],
+            following: [],
+            );
             
         await _firestore
             .collection("Users")

@@ -321,9 +321,11 @@
 // }
 
 import 'package:devspectrum/models/user.dart';
+import 'package:devspectrum/pages/project_details/comments.dart';
 import 'package:devspectrum/pages/project_details/post_details.dart';
 import 'package:devspectrum/providers/user_provider.dart';
 import 'package:devspectrum/resources/firestore_methods.dart';
+import 'package:devspectrum/utils/snackbar.dart';
 import 'package:devspectrum/widgets/like_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -338,6 +340,7 @@ class PostCard extends StatefulWidget {
 }
 
 bool isLikeAnimating = false;
+bool isLoading=false;
 
 class _PostCardState extends State<PostCard> {
    @override
@@ -399,7 +402,33 @@ class _PostCardState extends State<PostCard> {
                                   shrinkWrap: true,
                                   children: ['Delete']
                                       .map((e) => InkWell(
-                                            onTap: () {},
+                                            onTap: ()async {
+                                              if(user.username==widget.snap['username']){
+                                                setState(() {
+                                                  isLoading=true;
+                                                });
+                                            String res =  await  FirestoreMethods().deletePost(widget.snap['postId']);
+                                            if(res=='success'){
+                                              setState(() {
+                                                  isLoading=false;
+                                                });
+                                              Navigator.pop(context);
+                                              showSnackbar('Post deleted', context);
+                                            } else{
+                                               setState(() {
+                                                  isLoading=false;
+                                                });
+                                              Navigator.pop(context);
+                                              showSnackbar(res, context);
+                                            }
+                                              } else{
+                                                 setState(() {
+                                                  isLoading=false;
+                                                });
+                                                showSnackbar('You cannot delete someone else\'s post', context);
+                                                Navigator.pop(context);
+                                              }
+                                            },
                                             child: Container(
                                               padding:
                                                   const EdgeInsets.symmetric(
@@ -419,7 +448,7 @@ class _PostCardState extends State<PostCard> {
           ),
           SizedBox(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.4,
+            height: MediaQuery.of(context).size.height * 0.55,
             child: Image.network(
               widget.snap['postUrl'],
               fit: BoxFit.cover,
@@ -445,7 +474,14 @@ class _PostCardState extends State<PostCard> {
                     )),
               ),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CommentsPage(snap:widget.snap),
+                              ),
+                            );
+                  },
                   icon: const Icon(
                     Icons.comment,
                     size: 30,
@@ -464,6 +500,7 @@ class _PostCardState extends State<PostCard> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PostDetails(
+                                  projectName: widget.snap['projectName'],
                                     caption: widget.snap['caption'],
                                     github: widget.snap['github'],
                                     postId: widget.snap['postId'],
