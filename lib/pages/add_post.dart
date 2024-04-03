@@ -190,113 +190,119 @@ class _AddPostState extends State<AddPost> {
                           ),
                         ],
                       )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    : SingleChildScrollView(
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                radius: 25,
-                                backgroundImage: NetworkImage(user.photoUrl),
+                              Container(),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 25,
+                                    backgroundImage: NetworkImage(user.photoUrl),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Expanded(
+                                      child: TextField(
+                                    controller: captioncontroller,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Write a caption'),
+                                    maxLines: null,
+                                  )),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Container(
+                                    height: 50,
+                                    width: 50,
+                                    color: Colors.white,
+                                    child: Image.memory(
+                                      _image!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                ],
                               ),
                               const SizedBox(
-                                width: 10,
+                                height: 30,
+                              ),
+                              const Text(
+                                'add your project name here.',
+                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              TextField(
+                                controller: projectcontroller,
+                                decoration: const InputDecoration(
+                                    hintText: 'Devspectrum',
+                                    hintStyle: TextStyle(fontSize: 14)),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              const Text(
+                                'add your github repository here.',
+                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              TextField(
+                                controller: githubcontroller,
+                                decoration: const InputDecoration(
+                                    hintText:
+                                        'eg:https://github.com/jhon/devspectrum',
+                                    hintStyle: TextStyle(fontSize: 14)),
+                              ),
+                              const SizedBox(
+                                height: 30,
+                              ),
+                              ElevatedButton(
+                                  onPressed: () {
+                                    pickScreenshots();
+                                  },
+                                  child: const Text('Select screenshots')),
+                              const SizedBox(
+                                height: 10,
                               ),
                               Expanded(
-                                  child: TextField(
-                                controller: captioncontroller,
-                                decoration: const InputDecoration(
-                                    hintText: 'Write a caption'),
-                                maxLines: null,
-                              )),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Container(
-                                height: 50,
-                                width: 50,
-                                color: Colors.white,
-                                child: Image.memory(
-                                  _image!,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                                  child: SizedBox(
+                                width: double.infinity,
+                                child: selectedScreenshots.isEmpty
+                                    ? const Center(
+                                        child: Text('Please select screenshots'),
+                                      )
+                                    : GridView.builder(
+                                        itemCount: selectedScreenshots.length,
+                                        gridDelegate:
+                                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                crossAxisSpacing: 5,
+                                                mainAxisSpacing: 1.5,
+                                                childAspectRatio: 1),
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return Center(
+                                              child: kIsWeb
+                                                  ? Image.network(
+                                                      selectedScreenshots[index]
+                                                          .path,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Image.file(
+                                                      selectedScreenshots[index],
+                                                      fit: BoxFit.cover,
+                                                    ));
+                                        }),
+                              ))
                             ],
                           ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          const Text(
-                            'add your project name here.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                          TextField(
-                            controller: projectcontroller,
-                            decoration: const InputDecoration(
-                                hintText: 'Devspectrum',
-                                hintStyle: TextStyle(fontSize: 14)),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          const Text(
-                            'add your github repository here.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                          TextField(
-                            controller: githubcontroller,
-                            decoration: const InputDecoration(
-                                hintText:
-                                    'eg:https://github.com/jhon/devspectrum',
-                                hintStyle: TextStyle(fontSize: 14)),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          ElevatedButton(
-                              onPressed: () {
-                                pickScreenshots();
-                              },
-                              child: const Text('Select screenshots')),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Expanded(
-                              child: SizedBox(
-                            width: double.infinity,
-                            child: selectedScreenshots.isEmpty
-                                ? const Center(
-                                    child: Text('Please select screenshots'),
-                                  )
-                                : GridView.builder(
-                                    itemCount: selectedScreenshots.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            crossAxisSpacing: 5,
-                                            mainAxisSpacing: 1.5,
-                                            childAspectRatio: 1),
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Center(
-                                          child: kIsWeb
-                                              ? Image.network(
-                                                  selectedScreenshots[index]
-                                                      .path,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Image.file(
-                                                  selectedScreenshots[index],
-                                                  fit: BoxFit.cover,
-                                                ));
-                                    }),
-                          ))
-                        ],
-                      )));
+                      ),
+                    )));
   }
 }

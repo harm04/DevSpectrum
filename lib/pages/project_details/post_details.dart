@@ -137,7 +137,7 @@ class _PostDetailsState extends State<PostDetails> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10)),
                               width: double.infinity,
-                              height: MediaQuery.of(context).size.height * 0.33,
+                              height: MediaQuery.of(context).size.height * 0.27,
                               child: Image.network(
                                 widget.postUrl,
                                 fit: BoxFit.cover,
@@ -175,10 +175,27 @@ class _PostDetailsState extends State<PostDetails> {
                                 itemCount: widget.screenshots.length,
                                 scrollDirection: Axis.vertical,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Container(
+                                  return InkWell(
+                                    onTap: (){
+                                     showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SizedBox(
+                                  height: 300,
+                                  child: Center(
                                     child: Image.network(
-                                      widget.screenshots[index].toString(),
-                                      fit: BoxFit.cover,
+                                       widget.screenshots[index].toString(),
+                                        fit: BoxFit.cover,),
+                                  ),
+                                );
+                              },
+                            );
+                                    },
+                                    child: Container(
+                                      child: Image.network(
+                                        widget.screenshots[index].toString(),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
                                   );
                                 }),
